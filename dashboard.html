@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>GateFlow - Public Dashboard</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="floating-orb orb-1"></div>
+    <div class="floating-orb orb-2"></div>
+
+
+    <nav class="navbar glass animated-element">
+        <div class="logo">
+            <a href="javascript:history.back()" class="back-btn"><i class="fa-solid fa-arrow-left"></i></a>
+            <i class="fa-solid fa-stadium"></i> GateFlow
+        </div>
+        <ul class="nav-links">
+            <li><a href="dashboard.html" class="active">Live Traffic</a></li>
+            <li><a href="tickets.html">Tickets</a></li>
+            <li><a href="fanzone.html">Fan Zone</a></li>
+            <li><a href="shop.html">Shop</a></li>
+        </ul>
+        <div class="nav-controls">
+            <select id="stadium-select" class="glass-input" style="width: auto;">
+                <option value="Eden Gardens">Eden Gardens</option>
+                <option value="Wankhede">Wankhede Stadium</option>
+            </select>
+            <button id="theme-toggle-btn" class="theme-toggle"><i class="fa-solid fa-circle-half-stroke"></i></button>
+            <button onclick="window.location.href='index.html'" class="glass-btn" style="width:auto; padding:0.5rem 1rem;">Log In</button>
+        </div>
+    </nav>
+
+    <main class="container">
+        <div style="text-align:center; margin-bottom: 2rem;" class="animated-element delay-1">
+            <h1 style="font-weight:300; font-size:2.5rem; color:var(--text-primary);">
+                <span id="stadium-name">Eden Gardens</span> 
+                <span class="live-pulse-text" style="font-weight:600;">Live Status</span>
+            </h1>
+            <p style="color:var(--text-secondary); margin-top:0.5rem;">Log in to earn rewards for reporting congestion!</p>
+        </div>
+
+        <div class="dashboard-grid">
+            <!-- Left Col: Location, Gates & Map -->
+            <div class="animated-element delay-2">
+                
+                <!-- NEW LOCATION WIDGET -->
+                <section class="section glass hover-float" style="margin-bottom: 1.5rem;">
+                    <header class="section-header">
+                        <h2>Your Live Location</h2>
+                        <span class="badge green" id="location-badge">Tracking Active</span>
+                    </header>
+                    <div style="display:flex; align-items:center; gap:1.5rem;">
+                        <i class="fa-solid fa-location-crosshairs" style="font-size:2.5rem; color:var(--color-primary); animation: pulseGlow 2s infinite;"></i>
+                        <div>
+                            <p style="color:var(--text-primary); font-weight:600; font-size:1.1rem;" id="gps-status">Fetching GPS Coordinates...</p>
+                            <p style="color:var(--text-secondary); font-size:0.85rem; margin-top:0.2rem;">Location shared with emergency services for safety.</p>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="section glass hover-float" style="margin-bottom: 1.5rem;">
+                    <header class="section-header">
+                        <h2>Live Gate Traffic</h2>
+                    </header>
+                    <div id="gates-container">
+                        <!-- Gates populated by JS -->
+                    </div>
+                </section>
+                
+                <section class="section glass hover-float">
+                    <header class="section-header">
+                        <h2>Stadium Layout</h2>
+                    </header>
+                    <p style="text-align:center; font-size:0.85rem; color:var(--text-secondary); margin-bottom:1rem;">Visual overview of active stadium stands.</p>
+                    <div class="stadium-map">
+                        <div class="stand north">North</div>
+                        <div class="stand east">East</div>
+                        <div class="pitch">Pitch</div>
+                        <div class="stand west">West</div>
+                        <div class="stand south">South</div>
+                    </div>
+                </section>
+
+
+            </div>
+
+            <!-- Right Col: Heatmap / Call to Action / Scorecard -->
+            <div class="animated-element delay-3">
+                <section class="section glass hover-float" style="margin-bottom: 1.5rem;">
+                    <header class="section-header">
+                        <h2>Smart Routing Advisory</h2>
+                        <span class="badge green pulseGlow">ACTIVE</span>
+                    </header>
+                    <div style="padding: 1rem;">
+                        <h3 style="color:var(--text-primary); font-size:1.1rem; margin-bottom:0.5rem;"><i class="fa-solid fa-route" style="color:var(--color-primary);"></i> Recommended Path</h3>
+                        <p style="color:var(--text-secondary); font-size:0.9rem; margin-bottom:1rem;">Based on live traffic, we strongly advise entering through <strong style="color:var(--color-primary);">East Gate</strong> to reach your seat efficiently.</p>
+                        <div style="background:rgba(255,255,255,0.03); border:1px solid var(--glass-border); border-radius:12px; padding:1rem;">
+                            <div style="display:flex; justify-content:space-between; margin-bottom:0.5rem;">
+                                <span style="color:var(--text-secondary); font-size:0.8rem;">Est. Time to Seat:</span>
+                                <span style="color:var(--color-warning); font-weight:bold; font-size:0.9rem;">12 mins</span>
+                            </div>
+                            <div style="width:100%; height:6px; background:var(--bg-secondary); border-radius:3px; overflow:hidden;">
+                                <div style="width:40%; height:100%; background:var(--color-warning); border-radius:3px; position:relative; overflow:hidden;">
+                                    <div style="position:absolute; top:0; left:0; right:0; bottom:0; background:linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent); animation: shimmerSlide 2s infinite;"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="section glass hover-float" style="margin-bottom: 1.5rem;">
+                    <header class="section-header">
+                        <h2>Zone Capacity Breakdown</h2>
+                    </header>
+                    <div style="padding: 0.5rem 0;">
+                        <div style="margin-bottom:1.5rem;">
+                            <div style="display:flex; justify-content:space-between; font-size:0.85rem; margin-bottom:0.5rem;">
+                                <span style="color:var(--text-primary);">North Stand</span>
+                                <span style="color:var(--color-danger); font-weight:bold;">92% Full</span>
+                            </div>
+                            <div style="width:100%; height:8px; background:rgba(0,0,0,0.2); border-radius:4px; overflow:hidden;">
+                                <div style="width:92%; background:var(--color-danger); height:100%; border-radius:4px; position:relative;"><div style="position:absolute; top:0; left:0; right:0; bottom:0; background:linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent); animation: shimmerSlide 2s infinite;"></div></div>
+                            </div>
+                        </div>
+                        <div style="margin-bottom:1.5rem;">
+                            <div style="display:flex; justify-content:space-between; font-size:0.85rem; margin-bottom:0.5rem;">
+                                <span style="color:var(--text-primary);">South Stand</span>
+                                <span style="color:var(--color-warning); font-weight:bold;">65% Full</span>
+                            </div>
+                            <div style="width:100%; height:8px; background:rgba(0,0,0,0.2); border-radius:4px; overflow:hidden;">
+                                <div style="width:65%; background:var(--color-warning); height:100%; border-radius:4px;"></div>
+                            </div>
+                        </div>
+                        <div style="margin-bottom:0;">
+                            <div style="display:flex; justify-content:space-between; font-size:0.85rem; margin-bottom:0.5rem;">
+                                <span style="color:var(--text-primary);">West VIP Box</span>
+                                <span style="color:var(--color-primary); font-weight:bold;">15% Full</span>
+                            </div>
+                            <div style="width:100%; height:8px; background:rgba(0,0,0,0.2); border-radius:4px; overflow:hidden;">
+                                <div style="width:15%; background:var(--color-primary); height:100%; border-radius:4px;"></div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+
+
+                <section class="section glass hover-float" id="community-section" style="margin-bottom: 1.5rem;">
+                    <header class="section-header">
+                        <h2 id="community-header">Join the Community</h2>
+                    </header>
+                    <div id="community-content" class="info-card hover-float" style="text-align: center; border: 1px solid var(--color-primary); background: linear-gradient(135deg, rgba(16, 185, 129, 0.1), transparent); position: relative; overflow: hidden;">
+                        <div style="position: absolute; top: -30px; right: -30px; width: 100px; height: 100px; background: var(--color-primary); filter: blur(50px); opacity: 0.4;"></div>
+                        <div style="display:flex; justify-content:center; align-items:center; margin-bottom:1rem; gap:1rem;">
+                            <i class="fa-solid fa-gift" style="font-size:2.5rem; color:var(--color-primary); animation: pulseGlow 2s infinite;"></i>
+                            <i class="fa-solid fa-ticket" style="font-size:2rem; color:var(--color-warning); transform: rotate(15deg);"></i>
+                            <i class="fa-solid fa-burger" style="font-size:2rem; color:var(--color-danger); transform: rotate(-10deg);"></i>
+                        </div>
+                        <h3 style="margin-bottom:0.5rem; color:var(--text-primary); font-size:1.3rem;">Unlock VIP Fan Perks</h3>
+                        <p style="color:var(--text-secondary); margin-bottom:1.5rem; font-size:0.9rem;">Join GateFlow today. Report live crowd levels to earn points for <strong style="color:var(--color-primary);">Free Snacks</strong>, <strong style="color:var(--color-warning);">Merch</strong>, and <strong style="color:var(--color-danger);">VIP Upgrades!</strong></p>
+                        <button class="glass-btn shimmer-btn" style="border-radius: 30px; font-weight: 700; display:flex; align-items:center; justify-content:center; gap:0.5rem;" onclick="window.location.href='index.html'">
+                            CREATE FREE ACCOUNT <i class="fa-solid fa-arrow-right"></i>
+                        </button>
+                    </div>
+                </section>
+
+                <section class="section glass hover-float" id="scorecard">
+                    <header class="section-header">
+                        <h2>Live Match Score</h2>
+                        <span class="badge red pulseGlow">LIVE</span>
+                    </header>
+                    <div class="scorecard-content">
+                        <div class="team">
+                            <h3>CSK</h3>
+                            <span class="score" id="team1-score">178/4</span>
+                            <span class="overs" id="team1-overs">(18.2 ov)</span>
+                        </div>
+                        <div class="vs">VS</div>
+                        <div class="team">
+                            <h3>MI</h3>
+                            <span class="score" style="font-size:1rem; color:var(--text-secondary);">Yet to bat</span>
+                        </div>
+                    </div>
+                    <div class="match-status">
+                        <p id="match-status-text">CSK are batting. Current RR: 9.7</p>
+                    </div>
+                </section>
+
+
+            </div>
+        </div>
+    </main>
+
+    <script src="auth.js"></script>
+    <script src="app.js"></script>
+    <script>
+        // GPS Simulation Logic
+        setTimeout(() => {
+            const user = getCurrentUser();
+            let locationText = "Near Gate 4, Eden Gardens";
+            if(document.getElementById('stadium-select').value === 'Wankhede') {
+                locationText = "Near Gate 2, Wankhede Stadium";
+            }
+            document.getElementById('gps-status').innerHTML = `${locationText} <br><span style='font-size:0.85rem; color:var(--color-primary);'><i class='fa-solid fa-satellite-dish'></i> Accuracy: 3 Meters</span>`;
+        }, 1500);
+
+        // Dynamic Community Card Logic based on Auth
+        document.addEventListener('DOMContentLoaded', () => {
+            const user = getCurrentUser();
+            if (user) {
+                // User is logged in, change the card to Match/Team Updates
+                document.getElementById('community-header').innerText = "Safety Broadcast";
+                const contentBox = document.getElementById('community-content');
+                contentBox.style.borderColor = "var(--color-danger)";
+                contentBox.style.textAlign = "left";
+                contentBox.innerHTML = `
+                    <div style="text-align:center; margin-bottom:1rem;">
+                        <i class="fa-solid fa-bullhorn" style="font-size:3rem; color:var(--color-danger); animation: pulseRed 2s infinite;"></i>
+                    </div>
+                    <h3 style="margin-bottom:0.5rem; color:var(--text-primary); text-align:center;">Emergency Advisory</h3>
+                    <p style="color:var(--text-secondary); margin-bottom:1rem; font-size:0.9rem;">
+                        <b>Security Notice:</b> North Gate is currently experiencing severe congestion. Please reroute to East Gate. <br><br>
+                        <b>Medical:</b> Medical stations at Sector 4 and 9 are fully operational.
+                    </p>
+                    <div style="background:rgba(239, 68, 68, 0.1); padding:0.5rem; border-radius:8px; text-align:center;">
+                        <span style="color:var(--color-danger); font-weight:bold; font-size:0.8rem;">Advisory sent to ${user.username.toUpperCase()}</span>
+                    </div>
+                `;
+            }
+        });
+    </script>
+</body>
+</html>

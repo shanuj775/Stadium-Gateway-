@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>GateFlow - Fan Zone</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="floating-orb orb-1"></div>
+    <div class="floating-orb orb-2"></div>
+
+    <nav class="navbar glass animated-element">
+        <div class="logo">
+            <a href="javascript:history.back()" class="back-btn"><i class="fa-solid fa-arrow-left"></i></a>
+            <i class="fa-solid fa-stadium"></i> GateFlow
+        </div>
+        <ul class="nav-links">
+            <li><a href="dashboard.html">Live Traffic</a></li>
+            <li><a href="tickets.html">Tickets</a></li>
+            <li><a href="fanzone.html" class="active">Fan Zone</a></li>
+            <li><a href="shop.html">Shop</a></li>
+        </ul>
+        <div class="nav-controls">
+            <button id="theme-toggle-btn" class="theme-toggle"><i class="fa-solid fa-circle-half-stroke"></i></button>
+            <button onclick="window.location.href='index.html'" class="glass-btn" style="width:auto; padding:0.5rem 1rem;">Log In</button>
+        </div>
+    </nav>
+
+    <main class="container">
+        <div style="text-align:center; margin-bottom: 2rem;" class="animated-element delay-1">
+            <h1 style="font-weight:300; font-size:2.5rem; color:var(--text-primary);">Fan Community</h1>
+            <p style="color:var(--text-secondary); margin-top:0.5rem;">Chat with other fans and test your reflexes!</p>
+        </div>
+
+        <div class="dashboard-grid">
+            <!-- Left Col: Live Fan Chat -->
+            <div class="animated-element delay-2">
+                <section class="section glass hover-float">
+                    <header class="section-header">
+                        <h2>Global Fan Chat</h2>
+                        <span class="badge green pulseGlow"><i class="fa-solid fa-users"></i> 342 Online</span>
+                    </header>
+                    <div class="chat-box">
+                        <div class="chat-messages" id="chat-messages">
+                            <div class="msg"><span style="color:var(--color-primary); font-weight:bold;">Moderator:</span> Welcome to the Official CSK vs MI Match Chat!</div>
+                            <div class="msg"><span style="font-weight:bold;">Rahul99:</span> Dhoni is going to hit a century today!!! 🔥</div>
+                            <div class="msg"><span style="font-weight:bold;">MumbaiFan:</span> Dream on, Bumrah is going to take 5 wickets easily.</div>
+                            <div class="msg"><span style="font-weight:bold;">CricketLover:</span> What's the wait time at Gate C?</div>
+                        </div>
+                        <div class="chat-input-area">
+                            <input type="text" id="chat-input" class="glass-input" placeholder="Type your message..." onkeypress="if(event.key === 'Enter') sendMsg()">
+                            <button class="glass-btn" style="width:auto; padding:0.5rem 1.5rem;" onclick="sendMsg()"><i class="fa-solid fa-paper-plane"></i></button>
+                        </div>
+                    </div>
+                </section>
+            </div>
+
+            <!-- Right Col: Mini Game -->
+            <div class="animated-element delay-3">
+                <section class="section glass hover-float">
+                    <header class="section-header">
+                        <h2>Mini Game: Reflex Catcher</h2>
+                    </header>
+                    <p style="font-size:0.85rem; color:var(--text-secondary); margin-bottom:1rem;">Click the cricket ball as fast as you can before it disappears!</p>
+                    
+                    <div class="game-container" id="game-container">
+                        <div id="game-start-screen" style="text-align:center;">
+                            <i class="fa-solid fa-baseball-bat-ball" style="font-size:3rem; color:var(--color-primary); margin-bottom:1rem;"></i>
+                            <h3 style="color:var(--text-primary); margin-bottom:1rem;">Ready to catch?</h3>
+                            <button class="glass-btn shimmer-btn" style="width:auto; padding:0.5rem 2rem;" onclick="startGame()">Start Game</button>
+                        </div>
+                        <i class="fa-solid fa-baseball target-ball" id="target-ball" onclick="catchBall()"></i>
+                    </div>
+
+                    <div style="margin-top:1.5rem; text-align:center;">
+                        <p style="color:var(--text-secondary); font-size:1.2rem;">Score: <span id="game-score" style="color:var(--color-warning); font-weight:bold; font-size:1.5rem;">0</span></p>
+                    </div>
+                </section>
+            </div>
+        </div>
+    </main>
+
+    <script src="auth.js"></script>
+    <script>
+        // Chat Logic
+        function sendMsg() {
+            const input = document.getElementById('chat-input');
+            const msgText = input.value.trim();
+            if(!msgText) return;
+            
+            const chatBox = document.getElementById('chat-messages');
+            const msgEl = document.createElement('div');
+            msgEl.className = 'msg own';
+            
+            // Get username or default
+            const user = getCurrentUser();
+            const username = user ? user.username : 'Guest';
+            
+            msgEl.innerHTML = `<span style="font-weight:bold;">${username}:</span> ${msgText}`;
+            chatBox.appendChild(msgEl);
+            
+            input.value = '';
+            chatBox.scrollTop = chatBox.scrollHeight;
+
+            // Auto-reply simulation
+            setTimeout(() => {
+                const replyEl = document.createElement('div');
+                replyEl.className = 'msg';
+                const replies = ["I totally agree!", "No way, you're wrong.", "Wait, really?", "Haha exactly! 😂", "Let's see what happens next over."];
+                replyEl.innerHTML = `<span style="font-weight:bold;">Fan_XYZ:</span> ${replies[Math.floor(Math.random() * replies.length)]}`;
+                chatBox.appendChild(replyEl);
+                chatBox.scrollTop = chatBox.scrollHeight;
+            }, 2000);
+        }
+
+        // Mini Game Logic
+        let score = 0;
+        let gameInterval;
+        let ballVisibleTime;
+
+        function startGame() {
+            document.getElementById('game-start-screen').style.display = 'none';
+            score = 0;
+            document.getElementById('game-score').innerText = score;
+            spawnBall();
+        }
+
+        function spawnBall() {
+            const ball = document.getElementById('target-ball');
+            const container = document.getElementById('game-container');
+            
+            // Random position
+            const maxX = container.clientWidth - 40;
+            const maxY = container.clientHeight - 40;
+            
+            ball.style.left = Math.floor(Math.random() * maxX) + 'px';
+            ball.style.top = Math.floor(Math.random() * maxY) + 'px';
+            ball.style.display = 'block';
+            
+            // The ball disappears if not clicked fast enough
+            const difficultyMs = Math.max(500, 1500 - (score * 50)); // Gets faster
+            
+            clearTimeout(ballVisibleTime);
+            ballVisibleTime = setTimeout(() => {
+                if(ball.style.display === 'block') {
+                    ball.style.display = 'none';
+                    endGame();
+                }
+            }, difficultyMs);
+        }
+
+        function catchBall() {
+            const ball = document.getElementById('target-ball');
+            ball.style.display = 'none';
+            score++;
+            document.getElementById('game-score').innerText = score;
+            document.getElementById('game-score').style.transform = 'scale(1.5)';
+            setTimeout(()=> document.getElementById('game-score').style.transform = 'scale(1)', 200);
+            
+            setTimeout(spawnBall, Math.random() * 1000 + 500); // Spawn next ball shortly after
+        }
+
+        function endGame() {
+            document.getElementById('game-start-screen').style.display = 'block';
+            document.getElementById('game-start-screen').innerHTML = `
+                <h3 style="color:var(--color-danger); margin-bottom:1rem;">Game Over!</h3>
+                <p style="color:var(--text-secondary); margin-bottom:1rem;">You caught ${score} balls.</p>
+                <button class="glass-btn" style="width:auto; padding:0.5rem 2rem;" onclick="startGame()">Play Again</button>
+            `;
+        }
+    </script>
+</body>
+</html>

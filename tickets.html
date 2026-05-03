@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>GateFlow - Ticket Booking</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="floating-orb orb-1"></div>
+    <div class="floating-orb orb-2"></div>
+
+    <nav class="navbar glass animated-element">
+        <div class="logo">
+            <a href="javascript:history.back()" class="back-btn"><i class="fa-solid fa-arrow-left"></i></a>
+            <i class="fa-solid fa-stadium"></i> GateFlow
+        </div>
+        <ul class="nav-links">
+            <li><a href="dashboard.html">Live Traffic</a></li>
+            <li><a href="tickets.html" class="active">Tickets</a></li>
+            <li><a href="fanzone.html">Fan Zone</a></li>
+            <li><a href="shop.html">Shop</a></li>
+        </ul>
+        <div class="nav-controls">
+            <button id="theme-toggle-btn" class="theme-toggle"><i class="fa-solid fa-circle-half-stroke"></i></button>
+            <button onclick="window.location.href='index.html'" class="glass-btn" style="width:auto; padding:0.5rem 1rem;">Log In</button>
+        </div>
+    </nav>
+
+    <main class="container">
+        <div style="text-align:center; margin-bottom: 2rem;" class="animated-element delay-1">
+            <h1 style="font-weight:300; font-size:2.5rem; color:var(--text-primary);">Seat Booking</h1>
+            <p style="color:var(--text-secondary); margin-top:0.5rem;">Select a stadium and a stand to view available seats.</p>
+        </div>
+
+        <div class="animated-element delay-2" style="display:grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap:2rem; margin-bottom:2rem;">
+            <!-- Options Box 1: Stadium Selection -->
+            <section class="section glass hover-float" style="margin-bottom:0;">
+                <header class="section-header">
+                    <h2><i class="fa-solid fa-stadium" style="color:var(--color-primary); margin-right:10px;"></i> Select Venue</h2>
+                </header>
+                <div style="padding:1rem 0;">
+                    <p style="color:var(--text-secondary); font-size:0.9rem; margin-bottom:1rem;">Choose your preferred stadium to view live availability.</p>
+                    <select id="ticket-stadium-select" class="glass-input" style="padding:1rem;" onchange="changeStadiumLayout()">
+                        <option value="Eden Gardens">Eden Gardens</option>
+                        <option value="Wankhede">Wankhede Stadium</option>
+                        <option value="Modi">Narendra Modi Stadium</option>
+                    </select>
+                </div>
+            </section>
+
+            <!-- Options Box 2: Live Parking -->
+            <section class="section glass hover-float" style="margin-bottom:0;">
+                <header class="section-header">
+                    <h2><i class="fa-solid fa-square-parking" style="color:var(--color-warning); margin-right:10px;"></i> Live Parking</h2>
+                    <span class="badge yellow pulseGlow">LIVE</span>
+                </header>
+                <div id="parking-container" style="max-height: 180px; overflow-y: auto;">
+                    <!-- Populated by JS -->
+                </div>
+            </section>
+        </div>
+
+        <!-- Main Booking Area -->
+        <div class="animated-element delay-3">
+            <section class="section glass" style="min-height: 500px; display:flex; flex-direction:column; align-items:center; position:relative;">
+                <header class="section-header" style="width:100%;">
+                    <h2><i class="fa-solid fa-map-location-dot" style="color:var(--color-primary); margin-right:10px;"></i> Interactive Stadium Map</h2>
+                </header>
+                
+                <div class="stadium-map" id="interactive-stadium" style="transform: scale(1.1); margin: 3rem 0;">
+                    <!-- Populated by JS -->
+                </div>
+
+                <!-- Seat Selection (Slides in when stand is selected) -->
+                <div id="seat-selection-section" style="display:none; width:100%; border-top: 1px solid var(--glass-border); padding-top:2rem; animation: slideUpFade 0.6s ease-out;">
+                    <header class="section-header">
+                        <h2><span id="stand-title">North Stand</span> Seating Plan</h2>
+                    </header>
+                    <div style="display:flex; justify-content:center; gap:1.5rem; margin-bottom:2rem; font-size:0.85rem;">
+                        <span style="color:var(--text-secondary);"><span style="display:inline-block; width:18px; height:18px; background:var(--color-primary); border-radius:4px; margin-right:8px; vertical-align:middle; box-shadow:0 0 10px var(--color-primary-glow);"></span>Available</span>
+                        <span style="color:var(--text-secondary);"><span style="display:inline-block; width:18px; height:18px; background:var(--color-danger); opacity:0.4; border-radius:4px; margin-right:8px; vertical-align:middle;"></span>Booked</span>
+                        <span style="color:var(--text-secondary);"><span style="display:inline-block; width:18px; height:18px; background:var(--color-warning); border-radius:4px; margin-right:8px; vertical-align:middle; box-shadow:0 0 10px var(--color-warning-glow);"></span>Selected</span>
+                    </div>
+                    
+                    <div class="seat-grid" id="seat-grid" style="padding: 3rem 1rem; background: rgba(0,0,0,0.3); border-radius: 20px;">
+                        <!-- Tiered seats generated by JS -->
+                    </div>
+
+                    <div style="margin-top:2rem; padding:2rem; background:rgba(255,255,255,0.02); border-radius:16px; border:1px solid var(--glass-border); display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:2rem;">
+                        <div style="flex:1; min-width:250px;">
+                            <div style="margin-bottom:1rem; padding:0.8rem; background:rgba(16, 185, 129, 0.08); border-radius:12px; border:1px solid var(--color-primary);">
+                                 <label style="display:flex; align-items:center; gap:0.8rem; cursor:pointer; color:var(--text-primary); font-size:0.95rem;">
+                                     <input type="checkbox" id="add-parking" onchange="updateTotals()" style="width:20px; height:20px; accent-color:var(--color-primary);"> 
+                                     <span>Reserve Premium Parking Spot (<b>+₹500</b>)</span>
+                                 </label>
+                            </div>
+                            <div style="display:flex; gap:2rem;">
+                                <div>
+                                    <p style="color:var(--text-secondary); font-size:0.9rem;">Tickets Selected</p>
+                                    <p style="color:var(--text-primary); font-size:1.5rem; font-weight:700;" id="seat-count">0</p>
+                                </div>
+                                <div>
+                                    <p style="color:var(--text-secondary); font-size:0.9rem;">Estimated Total</p>
+                                    <p style="color:var(--color-warning); font-size:1.5rem; font-weight:700;" id="seat-total">₹0</p>
+                                </div>
+                            </div>
+                        </div>
+                        <button class="glass-btn shimmer-btn" style="width:auto; padding:1.2rem 3rem; font-size:1.1rem; border-radius:50px;" onclick="bookTickets()">
+                            PROCEED TO CHECKOUT <i class="fa-solid fa-arrow-right" style="margin-left:10px;"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Placeholder when no stand is selected -->
+                <div id="placeholder-box" style="text-align:center; padding:4rem 2rem; opacity:0.6;">
+                    <i class="fa-solid fa-hand-pointer" style="font-size:4rem; color:var(--text-secondary); margin-bottom:1.5rem; animation: floatOrb 3s infinite ease-in-out;"></i>
+                    <h3 style="color:var(--text-primary); margin-bottom:0.5rem;">Ready to Book?</h3>
+                    <p style="color:var(--text-secondary);">Select a stadium above and click on a stand in the map to choose your seats.</p>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <script src="auth.js"></script>
+    <script src="app.js"></script>
+    <script>
+        let selectedSeats = [];
+        let currentTicketPrice = 1500;
+        let currentStand = '';
+        let currentLayout = null;
+
+        // Renamed to avoid conflict with app.js stadiumsData
+        const ticketStandsData = {
+            "Eden Gardens": {
+                price: 1500,
+                stands: [
+                    { name: 'Club House', class: 'north', label: 'Club House', layout: { rows: [8, 10, 12], aisles: [1] } }, // Small VIP
+                    { name: 'B.C. Roy Stand', class: 'south', label: 'B.C. Roy', layout: { rows: [16, 18, 20, 22, 24], aisles: [2] } }, // Massive multi-aisle
+                    { name: 'J Block', class: 'east', label: 'J Block', layout: { rows: [14, 14, 14, 14, 14], aisles: [1] } }, // Rectangular block
+                    { name: 'C Block', class: 'west', label: 'C Block', layout: { rows: [10, 12, 14, 16, 18], aisles: [1] } } // Standard tier
+                ]
+            },
+            "Wankhede": {
+                price: 2500,
+                stands: [
+                    { name: 'Garware Pavilion', class: 'north', label: 'Garware', layout: { rows: [12, 14, 16, 18], aisles: [1] } },
+                    { name: 'Tata End', class: 'south', label: 'Tata End', layout: { rows: [20, 20, 20, 20, 20], aisles: [2] } }, // Long flat block
+                    { name: 'Vijay Merchant', class: 'east', label: 'Merchant', layout: { rows: [8, 10, 12, 14], aisles: [1] } },
+                    { name: 'MCA Pavilion', class: 'west', label: 'MCA', layout: { rows: [6, 8, 10], aisles: [0] } } // Exclusive box, NO aisles
+                ]
+            },
+            "Modi": {
+                price: 1000,
+                stands: [
+                    { name: 'Adani Pavilion', class: 'north', label: 'Adani', layout: { rows: [18, 20, 22, 24, 26, 28], aisles: [2] } }, // Immense stand
+                    { name: 'Reliance End', class: 'south', label: 'Reliance', layout: { rows: [24, 26, 28, 30], aisles: [3] } }, // 3 Aisles!
+                    { name: 'Block K', class: 'east', label: 'Block K', layout: { rows: [12, 14, 16, 18, 20], aisles: [1] } },
+                    { name: 'Block F', class: 'west', label: 'Block F', layout: { rows: [15, 15, 15, 15, 15, 15], aisles: [2] } } // Deep uniform
+                ]
+            }
+        };
+
+        function changeStadiumLayout() {
+            const selectEl = document.getElementById('ticket-stadium-select');
+            if(!selectEl) return;
+            const stid = selectEl.value;
+            const data = ticketStandsData[stid];
+            
+            const map = document.getElementById('interactive-stadium');
+            if(!map) return;
+            
+            map.innerHTML = '<div class="pitch">Pitch</div>';
+            
+            if(data && data.stands) {
+                data.stands.forEach(stand => {
+                    const el = document.createElement('div');
+                    el.className = `stand ${stand.class}`;
+                    el.innerText = stand.label;
+                    el.style.zIndex = "10";
+                    el.onclick = (e) => {
+                        e.stopPropagation();
+                        loadStand(stand.name, data.price, stand.layout);
+                    };
+                    map.appendChild(el);
+                });
+            }
+            
+            // Hide seat selection until a stand is clicked again
+            document.getElementById('seat-selection-section').style.display = 'none';
+            document.getElementById('placeholder-box').style.display = 'block';
+        }
+
+        function loadStand(standName, price, layout) {
+            document.getElementById('placeholder-box').style.display = 'none';
+            document.getElementById('seat-selection-section').style.display = 'block';
+            document.getElementById('stand-title').innerText = standName;
+            
+            currentStand = standName;
+            currentTicketPrice = price;
+            currentLayout = layout;
+
+            const grid = document.getElementById('seat-grid');
+            grid.innerHTML = '';
+            selectedSeats = [];
+            updateTotals();
+
+            const rowSeatCounts = layout.rows;
+            const numAisles = layout.aisles[0];
+            let seatCounter = 1;
+
+            rowSeatCounts.forEach((seatCount, rowIndex) => {
+                const rowDiv = document.createElement('div');
+                rowDiv.className = 'seat-row';
+                
+                const chunkSize = numAisles > 0 ? Math.floor(seatCount / (numAisles + 1)) : seatCount;
+                let currentAisleCount = 0;
+
+                for(let i=0; i<seatCount; i++) {
+                    // Dynamic Aisle Injection based on layout configuration
+                    if(numAisles > 0 && i > 0 && i % chunkSize === 0 && currentAisleCount < numAisles) {
+                        const aisle = document.createElement('div');
+                        aisle.className = 'seat-aisle';
+                        rowDiv.appendChild(aisle);
+                        currentAisleCount++;
+                    }
+
+                    const seat = document.createElement('div');
+                    const isBooked = Math.random() > 0.7;
+                    seat.className = isBooked ? 'seat booked' : 'seat';
+                    seat.dataset.id = seatCounter;
+                    
+                    if(!isBooked) {
+                        const currentId = seatCounter;
+                        seat.onclick = function() {
+                            if(this.classList.contains('selected')) {
+                                this.classList.remove('selected');
+                                selectedSeats = selectedSeats.filter(s => s !== currentId);
+                            } else {
+                                this.classList.add('selected');
+                                selectedSeats.push(currentId);
+                            }
+                            updateTotals();
+                        };
+                    }
+                    rowDiv.appendChild(seat);
+                    seatCounter++;
+                }
+                grid.appendChild(rowDiv);
+            });
+        }
+
+        function updateTotals() {
+            const hasParking = document.getElementById('add-parking').checked;
+            const parkingFee = hasParking ? 500 : 0;
+            const total = (selectedSeats.length * currentTicketPrice) + parkingFee;
+            
+            document.getElementById('seat-count').innerText = selectedSeats.length;
+            document.getElementById('seat-total').innerText = '₹' + total.toLocaleString();
+        }
+
+        function bookTickets() {
+            if(selectedSeats.length === 0) {
+                alert("Please select at least one seat.");
+                return;
+            }
+            alert(`Successfully booked ${selectedSeats.length} ticket(s) in ${currentStand} for ₹${(selectedSeats.length * currentTicketPrice).toLocaleString()}!`);
+            // Reset using the saved layout context
+            loadStand(currentStand, currentTicketPrice, currentLayout);
+        }
+
+        // Initialize default stadium layout on load
+        setTimeout(changeStadiumLayout, 100);
+
+    </script>
+</body>
+</html>

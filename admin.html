@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>GateFlow - Admin Control Center</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <nav class="navbar glass" style="border-bottom: 2px solid var(--color-danger);">
+        <div class="logo">
+            <i class="fa-solid fa-shield-halved" style="color:var(--color-danger);"></i> GateFlow Admin Center
+        </div>
+        <div class="nav-controls">
+            <div class="user-profile">
+                <span>System Administrator</span>
+                <a href="#" onclick="logout()" style="color:var(--text-secondary); margin-left:1rem; text-decoration:none;"><i class="fa-solid fa-right-from-bracket"></i> Logout</a>
+            </div>
+        </div>
+    </nav>
+
+    <main class="container">
+        <div class="admin-grid">
+            
+            <section class="section glass" style="grid-column: 1 / -1;">
+                <header class="section-header"><h2>Global Live Gates Overview</h2></header>
+                <div id="gates-container" style="display:grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap:1rem;"></div>
+            </section>
+
+            <section class="section glass">
+                <header class="section-header"><h2>Organizer Controls</h2></header>
+                
+                <div class="info-card">
+                    <h3 style="font-weight:400; margin-bottom:1rem; font-size:1rem; color:white;">Push System Alert (Ticker)</h3>
+                    <input type="text" id="broadcast-input" class="glass-input" placeholder="Enter emergency alert..." style="margin-bottom:1rem;">
+                    <button class="glass-btn" style="background:var(--color-danger); color:white;" id="btn-broadcast">Broadcast to All Devices</button>
+                </div>
+
+                <div class="info-card">
+                    <h3 style="font-weight:400; margin-bottom:1rem; font-size:1rem; color:white;">Force Gate Status (Override)</h3>
+                    <div style="display:flex; gap:1rem; margin-bottom:1rem;">
+                        <select id="override-gate" class="glass-input">
+                            <option value="A">North Gate</option>
+                            <option value="B">East Gate</option>
+                        </select>
+                        <select id="override-status" class="glass-input">
+                            <option value="red">Close / Red</option>
+                            <option value="green">Open / Green</option>
+                        </select>
+                    </div>
+                    <button class="glass-btn" style="background:transparent; border:1px solid var(--color-danger); color:var(--color-danger);" onclick="alert('Override Command Sent to Hardware Relays.');">Execute Override</button>
+                </div>
+            </section>
+            
+            <section class="section glass">
+                <header class="section-header"><h2>Analytics Overview</h2></header>
+                <div class="info-card" style="text-align:center;">
+                    <div style="font-size:3rem; color:var(--color-primary); text-shadow:0 0 20px var(--color-primary-glow);">12,450</div>
+                    <p style="color:var(--text-secondary); text-transform:uppercase; font-size:0.85rem;">Total Fans Checked-in</p>
+                </div>
+                <div class="info-card" style="text-align:center;">
+                    <div style="font-size:3rem; color:var(--color-warning); text-shadow:0 0 20px var(--color-warning-glow);">85%</div>
+                    <p style="color:var(--text-secondary); text-transform:uppercase; font-size:0.85rem;">Average Stadium Capacity</p>
+                </div>
+            </section>
+
+        </div>
+    </main>
+
+    <script src="auth.js"></script>
+    <script src="app.js"></script>
+    <script>
+        requireAuth('admin');
+        
+        document.getElementById('btn-broadcast').addEventListener('click', () => {
+            const val = document.getElementById('broadcast-input').value;
+            if(val) {
+                alert('Broadcast Sent to all fan devices: ' + val);
+                document.getElementById('broadcast-input').value = '';
+            }
+        });
+    </script>
+</body>
+</html>

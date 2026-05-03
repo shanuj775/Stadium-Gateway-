@@ -1,0 +1,11 @@
+{
+  "name": "gateflow-stadium-management",
+  "version": "1.0.0",
+  "description": "Premium Stadium Crowd Management and Ticketing Dashboard",
+  "scripts": {
+    "start": "serve ."
+  },
+  "dependencies": {
+    "serve": "^14.2.0"
+  }
+}

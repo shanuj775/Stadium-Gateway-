@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>GateFlow - User Portal</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div style="position:absolute; top:20px; right:20px; z-index:1000;">
+        <button id="theme-toggle-btn" class="theme-toggle"><i class="fa-solid fa-moon"></i></button>
+    </div>
+
+    <nav class="navbar glass animated-element">
+        <div class="logo">
+            <i class="fa-solid fa-stadium"></i> GateFlow Fan Portal
+        </div>
+        <div class="nav-controls" style="padding-right:3rem;">
+            <a href="dashboard.html" class="glass-btn glass-btn-outline" style="text-decoration:none; padding:0.4rem 1rem; font-size:0.85rem; width:auto; display:flex; align-items:center; gap:0.5rem;"><i class="fa-solid fa-house"></i> Home</a>
+            <div class="user-profile">
+                <span>Welcome, <b id="display-name" style="color:var(--color-primary);">User</b></span>
+                <span class="balance-badge"><i class="fa-solid fa-coins"></i> <span id="display-balance">0</span> pts</span>
+                <a href="#" onclick="logout()" style="color:var(--text-secondary); margin-left:1rem; text-decoration:none; transition:0.3s;"><i class="fa-solid fa-right-from-bracket"></i> Logout</a>
+            </div>
+        </div>
+    </nav>
+
+    <main class="container">
+        <div class="dashboard-grid">
+            
+            <!-- Left Col: Profile & History -->
+            <div class="animated-element delay-1">
+                <section class="section glass">
+                    <header class="section-header"><h2>Account Balance</h2></header>
+                    <div class="info-card" style="text-align: center;">
+                        <p style="color:var(--text-secondary); text-transform:uppercase; letter-spacing:1px; font-size:0.85rem;">Available Points</p>
+                        <div class="balance-display"><span id="main-balance">0</span></div>
+                        <button class="glass-btn glass-btn-outline">Redeem Rewards</button>
+                    </div>
+                </section>
+
+                <section class="section glass">
+                    <header class="section-header"><h2>Match History</h2></header>
+                    <ul class="history-list" id="history-container">
+                        <!-- Populated by JS -->
+                    </ul>
+                </section>
+            </div>
+
+            <!-- Right Col: Live Gates & Actions -->
+            <div class="animated-element delay-2">
+                <section class="section glass">
+                    <header class="section-header">
+                        <h2>Live Gate Traffic</h2>
+                        <select id="stadium-select" class="glass-input" style="width:auto; padding:0.25rem; font-size:0.85rem;">
+                            <option value="Eden Gardens">Eden Gardens</option>
+                            <option value="Wankhede">Wankhede Stadium</option>
+                        </select>
+                    </header>
+                    <div id="gates-container">
+                        <!-- Gates populated by JS -->
+                    </div>
+                </section>
+
+                <section class="section glass">
+                    <header class="section-header">
+                        <h2>Report Gate Status</h2>
+                    </header>
+                    <form id="report-form">
+                        <div style="display:flex; gap:1rem;">
+                            <div class="form-group" style="flex:1;">
+                                <label>Select Gate</label>
+                                <select id="report-gate" class="glass-input">
+                                    <option value="A">Gate A</option>
+                                    <option value="B">Gate B</option>
+                                    <option value="C">Gate C</option>
+                                    <option value="D">Gate D</option>
+                                </select>
+                            </div>
+                            <div class="form-group" style="flex:1;">
+                                <label>Crowd Level</label>
+                                <select id="report-level" class="glass-input">
+                                    <option value="low">Low (Clear)</option>
+                                    <option value="medium">Medium (Busy)</option>
+                                    <option value="high">High (Crowded)</option>
+                                </select>
+                            </div>
+                        </div>
+                        <button type="submit" class="glass-btn" style="margin-top:1rem;">Submit Report (+10 pts)</button>
+                    </form>
+                </section>
+            </div>
+
+        </div>
+    </main>
+
+    <script src="auth.js"></script>
+    <script src="app.js"></script>
+    <script>
+        requireAuth('user');
+        const user = getCurrentUser();
+        document.getElementById('display-name').innerText = user.username.toUpperCase();
+        document.getElementById('display-balance').innerText = user.balance;
+        document.getElementById('main-balance').innerText = user.balance;
+
+        const histContainer = document.getElementById('history-container');
+        if(user.history.length === 0) {
+            histContainer.innerHTML = '<p style="color:var(--text-secondary); text-align:center;">No match history found.</p>';
+        } else {
+            user.history.forEach(h => {
+                histContainer.innerHTML += `
+                    <li class="history-item">
+                        <div>
+                            <div class="history-match">${h.match}</div>
+                            <div class="history-date">${h.date} - ${h.gate}</div>
+                        </div>
+                        <div class="history-pts">${h.points}</div>
+                    </li>
+                `;
+            });
+        }
+    </script>
+</body>
+</html>
