@@ -1,8 +1,8 @@
 // Central Authentication and State
-const DB_KEY = 'gateflow_db';
+const DB_KEY = 'stadiumgateway_db';
 
 function initTheme() {
-    const savedTheme = localStorage.getItem('gateflow_theme') || 'dark';
+    const savedTheme = localStorage.getItem('stadiumgateway_theme') || 'dark';
     document.body.setAttribute('data-theme', savedTheme);
 }
 
@@ -10,7 +10,7 @@ function toggleTheme() {
     const currentTheme = document.body.getAttribute('data-theme') || 'dark';
     const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
     document.body.setAttribute('data-theme', newTheme);
-    localStorage.setItem('gateflow_theme', newTheme);
+    localStorage.setItem('stadiumgateway_theme', newTheme);
 }
 
 const defaultDb = {
@@ -232,7 +232,7 @@ const hiTranslations = {
     'Recommended Path': 'अनुशंसित मार्ग',
     'Est. Time to Seat:': 'सीट तक पहुंचने का समय:',
     'Unlock VIP Fan Perks': 'VIP फैन लाभ अनलॉक करें',
-    'Join GateFlow today. Report live crowd levels to earn points for': 'आज ही गेटफ़्लो से जुड़ें। अंक अर्जित करने के लिए लाइव भीड़ के स्तर की रिपोर्ट करें',
+    'Join StadiumGateway today. Report live crowd levels to earn points for': 'आज ही स्टेडियम गेटवे से जुड़ें। अंक अर्जित करने के लिए लाइव भीड़ के स्तर की रिपोर्ट करें',
     'Free Snacks': 'मुफ्त नाश्ता',
     'Merch': 'मर्च',
     'VIP Upgrades!': 'VIP अपग्रेड!',
@@ -280,10 +280,10 @@ document.addEventListener('DOMContentLoaded', () => {
             <option value="en">EN</option>
             <option value="hi">HI</option>
         `;
-        langSelect.value = localStorage.getItem('gateflow_lang') || 'en';
+        langSelect.value = localStorage.getItem('stadiumgateway_lang') || 'en';
         
         langSelect.addEventListener('change', (e) => {
-            localStorage.setItem('gateflow_lang', e.target.value);
+            localStorage.setItem('stadiumgateway_lang', e.target.value);
             window.location.reload();
         });
         
@@ -304,7 +304,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // 2. Apply Translations if needed
-    const lang = localStorage.getItem('gateflow_lang');
+    const lang = localStorage.getItem('stadiumgateway_lang');
     if (lang === 'hi') {
         const walkDOM = (node) => {
             if (node.nodeType === 3) {

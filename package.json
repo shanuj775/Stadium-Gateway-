@@ -1,7 +1,7 @@
 {
-  "name": "gateflow-stadium-management",
+  "name": "stadiumgateway",
   "version": "1.0.0",
-  "description": "Premium Stadium Crowd Management and Ticketing Dashboard",
+  "description": "Premium StadiumGateway Crowd Management and Ticketing Dashboard",
   "scripts": {
     "start": "serve ."
   },

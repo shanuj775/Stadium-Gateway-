@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>GateFlow - Professional Login</title>
+    <title>StadiumGateway - Professional Login</title>
     <link rel="stylesheet" href="styles.css">
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -22,7 +22,7 @@
     <div class="login-container glass animated-element">
         <div class="login-header">
             <i class="fa-solid fa-stadium logo-icon"></i>
-            <h1 id="form-title">GateFlow</h1>
+            <h1 id="form-title">StadiumGateway</h1>
             <p id="form-subtitle">Smart Stadium Advisory</p>
         </div>
         <form id="login-form">
@@ -84,7 +84,7 @@
             document.getElementById('password').value = '';
 
             if(isLoginMode) {
-                title.innerText = 'GateFlow';
+                title.innerText = 'StadiumGateway';
                 subtitle.innerText = 'Smart Stadium Advisory';
                 btn.innerText = 'Secure Login';
                 hints.style.display = 'block';
@@ -133,7 +133,7 @@
                     errorMsg.innerText = result.error;
                     errorMsg.style.display = 'block';
                 } else {
-                    alert("Account Created Successfully! Welcome to GateFlow.");
+                    alert("Account Created Successfully! Welcome to StadiumGateway.");
                     window.location.href = 'user.html';
                 }
             }
